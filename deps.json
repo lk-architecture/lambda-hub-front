@@ -1,0 +1,28 @@
+{
+    "css": [
+        "node_modules/bootstrap/dist/css/bootstrap.css",
+        "node_modules/lato-font/css/lato-font.css",
+        "node_modules/font-awesome/css/font-awesome.css"
+    ],
+    "fonts": [
+        "node_modules/lato-font/fonts/**/*",
+        "node_modules/font-awesome/fonts/*"
+    ],
+    "js": [
+        "aws-sdk/dist/aws-sdk",
+        "babel-polyfill",
+        "bluebird",
+        "bootstrap-table-react",
+        "ramda",
+        "react",
+        "react-bootstrap",
+        "react-dom",
+        "react-redux",
+        "react-router",
+        "redux",
+        "redux-form",
+        "redux-logger",
+        "redux-persist",
+        "redux-thunk"
+    ]
+}
