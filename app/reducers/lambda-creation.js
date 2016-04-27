@@ -29,7 +29,8 @@ export default function lambdaCreation (state = defaultLambdaCreation, action) {
         return {
             ...state,
             completed: false,
-            error: payload
+            error: payload,
+            started: false
         };
     case LAMBDA_UPSERT_RESET_PROGRESS:
         return defaultLambdaCreation;

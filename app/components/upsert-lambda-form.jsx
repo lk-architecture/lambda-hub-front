@@ -54,6 +54,7 @@ class UpsertLambdaForm extends Component {
                 >
                     {creationReporter.completed ? "Succesfully saved" : creationReporter.started ? "Saving" : "Save"}
                 </Button>
+                {creationReporter.error ? creationReporter.error : null}
             </form>
         );
     }

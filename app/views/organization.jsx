@@ -4,7 +4,7 @@ import {Button, Breadcrumb} from "react-bootstrap";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 
-import {listLambdas} from "actions/lambdas";
+import {listLambdas, removeLambda} from "actions/lambdas";
 import Icon from "components/icon";
 import history from "lib/history";
 
@@ -13,11 +13,18 @@ class Organization extends Component {
     static propTypes = {
         lambdasCollection: PropTypes.array,
         listLambdas: PropTypes.func.isRequired,
-        organizationName: PropTypes.string.isRequired
+        organizationName: PropTypes.string.isRequired,
+        removeLambda: PropTypes.func.isRequired
     }
 
     componentWillMount () {
-        this.props.listLambdas();
+        const {organizationName, listLambdas} = this.props;
+        listLambdas(organizationName);
+    }
+
+    removeLambda (lambdaName) {
+        const {organizationName, removeLambda} = this.props;
+        removeLambda(organizationName, lambdaName);
     }
 
     render () {
@@ -55,9 +62,12 @@ class Organization extends Component {
                         },
                         {
                             key: "remove",
-                            valueFormatter: () => (
+                            valueFormatter: (value, lambda) => (
                                 <Icon
                                     icon="trash"
+                                    onClick={() => {
+                                        this.removeLambda(lambda.name);
+                                    }}
                                 />
                             )
                         }
@@ -79,7 +89,8 @@ function mapStateToProps (state, props) {
 }
 function mapDispatchToProps (dispatch) {
     return {
-        listLambdas: bindActionCreators(listLambdas, dispatch)
+        listLambdas: bindActionCreators(listLambdas, dispatch),
+        removeLambda: bindActionCreators(removeLambda, dispatch)
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Organization);

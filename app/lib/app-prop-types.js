@@ -36,7 +36,7 @@ export const lambda = PropTypes.shape({
 });
 export const lambdas = PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
-    fetchingError: PropTypes.instanceOf(Error),
+    fetchingError: PropTypes.string,
     collection: PropTypes.arrayOf(lambda).isRequired
 });
 
@@ -46,6 +46,6 @@ export const organization = PropTypes.shape({
 });
 export const organizations = PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
-    fetchingError: PropTypes.instanceOf(Error),
+    fetchingError: PropTypes.string,
     collection: PropTypes.arrayOf(organization).isRequired
 });

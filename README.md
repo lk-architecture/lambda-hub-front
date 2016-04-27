@@ -10,3 +10,9 @@ After cloning the repository, run `npm install` to install all dependencies and
 ## Configuration
 
 The application can be configured using a `.env` file.
+
+To correctly configure Auth0 you have to provide those properties in your `.env` file (key=value format):
+
+- `API_URL`
+- `AUTH0_CLIENT_ID`
+- `AUTH0_DOMAIN`

@@ -5,7 +5,7 @@ import {Button, Breadcrumb} from "react-bootstrap";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 
-import {listOrganizations} from "actions/organizations";
+import {listOrganizations, removeOrganization} from "actions/organizations";
 import Icon from "components/icon";
 import * as AppPropTypes from "lib/app-prop-types";
 import history from "lib/history";
@@ -14,7 +14,8 @@ class Organizations extends Component {
 
     static propTypes = {
         listOrganizations: PropTypes.func.isRequired,
-        organizations: AppPropTypes.organizations
+        organizations: AppPropTypes.organizations,
+        removeOrganization: PropTypes.func.isRequired
     }
 
     componentWillMount () {
@@ -22,7 +23,7 @@ class Organizations extends Component {
     }
 
     render () {
-        const {organizations} = this.props;
+        const {organizations, removeOrganization} = this.props;
         return (
             <div>
                 <Breadcrumb>
@@ -36,14 +37,19 @@ class Organizations extends Component {
                         "name",
                         {
                             key: "remove",
-                            valueFormatter: () => (
+                            valueFormatter: (value, org) => (
                                 <Icon
                                     icon="trash"
+                                    onClick={(event) => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        removeOrganization(org.name);
+                                    }}
                                 />
                             )
                         }
                     ]}
-                    onRowClick={(event) => history.push(`/organization/${event.name}`)}
+                    onRowClick={(org) => history.push(`/organization/${org.name}`)}
                     tableOptions={{
                         hover: true,
                         responsive: true,
@@ -65,7 +71,8 @@ function mapStateToProps (state) {
 }
 function mapDispatchToProps (dispatch) {
     return {
-        listOrganizations: bindActionCreators(listOrganizations, dispatch)
+        listOrganizations: bindActionCreators(listOrganizations, dispatch),
+        removeOrganization: bindActionCreators(removeOrganization, dispatch)
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Organizations);

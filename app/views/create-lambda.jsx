@@ -19,7 +19,8 @@ class CreateLambda extends Component {
     }
 
     handleSubmit (lambda) {
-        this.props.upsertLambda(lambda, this.props.organizationName);
+        const {organizationName, upsertLambda} = this.props;
+        upsertLambda(organizationName, lambda);
     }
 
     render () {

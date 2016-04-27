@@ -1,44 +1,51 @@
 import {create} from "axios";
 
 import {BACKEND_ENDPOINT, BACKEND_TIMEOUT} from "config";
+import store from "lib/store";
 
-var client = create({
-    baseURL: BACKEND_ENDPOINT,
-    timeout: BACKEND_TIMEOUT
-});
+var clientInstance;
+
+function getClient () {
+    if (undefined === clientInstance) {
+        clientInstance = create({
+            baseURL: BACKEND_ENDPOINT,
+            timeout: BACKEND_TIMEOUT,
+            headers: {
+                "Authorization": `Bearer ${store.getState().auth0.token}`
+            }
+        });
+    }
+    return clientInstance;
+}
 
 export function getOrganizations () {
-    var response = client.get("/api/organizations");
-    return response.data;
+    return getClient().get("/organizations");
 }
 
 export function saveOrganization (organization) {
-    client.post("/api/organizations", organization);
+    return getClient().post("/organizations", organization);
 }
 
 export function getOrganization (organizationName) {
-    var response = client.get(`/api/organizations/${organizationName}`);
-    return response.data;
+    return getClient().get(`/organizations/${organizationName}`);
 }
 
 export function deleteOrganization (organizationName) {
-    client.delete(`/api/organizations/${organizationName}`);
+    return getClient().delete(`/organizations/${organizationName}`);
 }
 
 export function getLambdas (organizationName) {
-    var response = client.get(`/api/lambdas/${organizationName}`);
-    return response.data;
+    return getClient().get(`/lambdas/${organizationName}`);
 }
 
 export function saveLambda (organizationName, lambda) {
-    client.post(`/api/lambdas/${organizationName}`, lambda);
+    return getClient().post(`/lambdas/${organizationName}/`, lambda);
 }
 
 export function getLambda (organizationName, lambdaName) {
-    var response = client.get(`/api/lambdas/${organizationName}/${lambdaName}`);
-    return response.data;
+    return getClient().get(`/lambdas/${organizationName}/${lambdaName}`);
 }
 
 export function deleteLambda (organizationName, lambdaName) {
-    client.delete(`/api/lambdas/${organizationName}/${lambdaName}`);
+    return getClient().delete(`/lambdas/${organizationName}/${lambdaName}`);
 }

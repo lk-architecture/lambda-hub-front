@@ -1,4 +1,5 @@
 import {
+    LAMBDA_DELETE_SUCCESS,
     LAMBDAS_LIST_START,
     LAMBDAS_LIST_SUCCESS,
     LAMBDAS_LIST_ERROR
@@ -35,6 +36,14 @@ export default function lambdas (state = defaultOrganizations, action) {
             ...state,
             fetching: false,
             fetchingError: payload
+        };
+    case LAMBDA_DELETE_SUCCESS:
+        return {
+            fetching: false,
+            fetchingError: null,
+            collection: state.collection.filter((value) => {
+                return value.name !== payload;
+            })
         };
     default:
         return state;

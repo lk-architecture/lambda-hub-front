@@ -1,6 +1,4 @@
-import * as config from "config";
-
-import {getDynamodb} from "lib/aws-services";
+import {deleteOrganization, getOrganizations, saveOrganization} from "lib/backend";
 
 export const ORGANIZATIONS_LIST_START = "ORGANIZATIONS_LIST_START";
 export const ORGANIZATIONS_LIST_SUCCESS = "ORGANIZATIONS_LIST_SUCCESS";
@@ -8,23 +6,19 @@ export const ORGANIZATIONS_LIST_ERROR = "ORGANIZATIONS_LIST_ERROR";
 
 export function listOrganizations () {
     return async dispatch => {
-        try {
-            const dynamodb = getDynamodb();
-            dispatch({type: ORGANIZATIONS_LIST_START});
-            const result = await dynamodb.scanAsync({
-                TableName: config.DYNAMODB_ORGANIZATIONS_TABLE
-            });
+        dispatch({type: ORGANIZATIONS_LIST_START});
+        getOrganizations().then(response => {
             dispatch({
                 type: ORGANIZATIONS_LIST_SUCCESS,
-                payload: result.Items
+                payload: response.data
             });
-        } catch (error) {
+        }).catch((error) => {
             dispatch({
                 type: ORGANIZATIONS_LIST_ERROR,
-                payload: error,
+                payload: error.statusText,
                 error: true
             });
-        }
+        });
     };
 }
 
@@ -35,13 +29,8 @@ export const ORGANIZATION_UPSERT_RESET_PROGRESS = "ORGANIZATION_UPSERT_RESET_PRO
 
 export function upsertOrganization (organization) {
     return async dispatch => {
-        try {
-            const dynamodb = getDynamodb();
-            dispatch({type: ORGANIZATION_UPSERT_START});
-            await dynamodb.putAsync({
-                TableName: config.DYNAMODB_ORGANIZATIONS_TABLE,
-                Item: organization
-            });
+        dispatch({type: ORGANIZATION_UPSERT_START});
+        saveOrganization(organization).then(() => {
             dispatch({
                 type: ORGANIZATION_UPSERT_SUCCESS,
                 payload: organization
@@ -49,12 +38,34 @@ export function upsertOrganization (organization) {
             setTimeout(() => {
                 dispatch({type: ORGANIZATION_UPSERT_RESET_PROGRESS});
             }, 2000);
-        } catch (error) {
+        }).catch((error) => {
             dispatch({
                 type: ORGANIZATION_UPSERT_ERROR,
                 payload: error,
                 error: true
             });
-        }
+        });
+    };
+}
+
+export const ORGANIZATION_DELETE_START = "ORGANIZATION_DELETE_START";
+export const ORGANIZATION_DELETE_SUCCESS = "ORGANIZATION_DELETE_SUCCESS";
+export const ORGANIZATION_DELETE_ERROR = "ORGANIZATION_DELETE_ERROR";
+
+export function removeOrganization (organizationName) {
+    return async dispatch => {
+        dispatch({type: ORGANIZATION_DELETE_START});
+        deleteOrganization(organizationName).then(() => {
+            dispatch({
+                type: ORGANIZATION_DELETE_SUCCESS,
+                payload: organizationName
+            });
+        }).catch((error) => {
+            dispatch({
+                type: ORGANIZATION_DELETE_ERROR,
+                payload: error.statusText,
+                error: true
+            });
+        });
     };
 }
