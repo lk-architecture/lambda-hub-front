@@ -1,5 +1,5 @@
 {
-  "name": "lambda-hub-front",
+  "name": "lh-front",
   "version": "1.0.0",
   "description": "Lambda Hub frontend",
   "main": "app/main.html",

@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/lk-architecture/lk-app-front.svg?branch=master)](https://travis-ci.org/lk-architecture/lk-app-front)
 
-# lambda-hub-front
+# lh-front
 
 ## Development environment setup
 
